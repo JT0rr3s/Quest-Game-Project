@@ -10,10 +10,14 @@ class Player:
         self.turns = turns
     def noOfTurns(self, turns):
         if turns <= 0:
-            print("\n\n🪦 🪦  Michael got you!! You made too many wrong choices this night. 🪦 🪦\n\n")
+            print("\n\n🪦 🪦  Michael got you!! You made too many wrong choices this Halloween night. 🪦 🪦\n\n")
             logging.info(f"out of turns")
+            game_ends = datetime.datetime.now()
+            logging.info(f"Game started at {game_begins}")
+            logging.info(f"Game ended at {game_ends}")
+            logging.info(f"Total game time: {game_ends - game_begins}.")
             time.sleep(2)
-            create_csv()
+            csv_file()
             exit()
 
 logging.basicConfig(filename="halloween.log", format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S', filemode='w')
@@ -22,7 +26,7 @@ logger = logging.getLogger()
 
 logger.setLevel(logging.DEBUG)
 
-def create_csv():
+def csv_file():
     with open('halloween.log') as file:
         lines = file.read().splitlines()
         lines = [lines[x:x+2] for x in range(0, len(lines), 2)]
@@ -32,6 +36,8 @@ def create_csv():
         w.writerows(lines)
 
 def intro():
+    global game_begins
+    game_begins = datetime.datetime.now()
     print("\n🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃                 ")
     print("🎃                                                                                                          🎃       ")
     print("🎃           It's Halloween 1978 in Haddonfield, IL, and as the local sheriff has claimed:                  🎃       ")
@@ -50,15 +56,18 @@ def intro():
     print("🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 \n \n  ")   
     print("")
 
+    logging.info(f"Requesting name for game.")
     global player
-    global total
-    player = Player(input("What is your name? "), 1)
+    player = Player(input("What is your name? "), 3)
 
     while True:
         if (len(player.playerName.strip())):
             break
         else:
-            player = Player(input("You must provide a name. What is your name? "))
+            logging.info(f"No valid name provided.")
+            logging.info(f"Requesting name for game again.")
+            time.sleep(1)
+            player = Player(input("You must provide a name. What is your name? "), 3)
             Return
 
     print(f"\nWelcome, {player.playerName}! Be warned - you must be ready for him. . . if you don't, it's your funeral.")
@@ -70,7 +79,14 @@ def intro():
             print("\n\nWonderful! Let's get started!")
             firstScenario()
         elif response.lower() == 'no':
-            print("\nGo home then! You're wasting my time!")
+            logging.info(f"You gave up before even starting.")
+            game_ends = datetime.datetime.now()
+            logging.info(f"Game started at {game_begins}")
+            logging.info(f"Game ended at {game_ends}")
+            logging.info(f"Total game time: {game_ends - game_begins}.")
+            time.sleep(1)
+            print(f"\nPoor, {player.playerName}. It's tragic, you NEVER go out. You gave up before even starting the game.") 
+            print("\nHope you come back and play the entire game next time!\n")
             exit()
         else: 
             print("\nYou must answer Yes or No")
@@ -103,21 +119,28 @@ def firstScenario():
 
     while True:
         if response.lower() == 'a':
+            logging.info(f"Right choice made to believe Tommy.")
+            time.sleep(1)
             print("\n\nGreat Choice! Let's keep surviving the night!")    
             secondScenario()
         elif response.lower() == 'b':
+            logging.info(f"Wrong choice made to disregard Tommy's claim.")
+            time.sleep(1)
             player.turns -= 1
             player.noOfTurns(player.turns)
             firstScenarioWrong()
             print("Let's try again!")
             firstScenario()
-        else: 
+        else:
+            logging.info(f"Invalid answer provided.")
+            time.sleep(1) 
             print(f"\nYou must answer A or B, {player.playerName}.")
             response = input(f"\nWhich do you choose? ")
             Return
 print("")
 
 def firstScenarioWrong():
+    logging.info(f"Provided response for wrong choice.")
     print("\n🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃                 ")
     print("🎃                                                                                                          🎃       ")
     print("🎃                               This was not the best choice to make.                                      🎃       ")
@@ -130,6 +153,7 @@ def firstScenarioWrong():
     print("🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 \n \n  ")   
 
 def secondScenario():
+    logging.info(f"Provided response for right choice.")
     print("\n🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃                ")
     print("🎃                                                                                                          🎃       ")
     print("🎃     After you put the kids to bed, you walk across the street and knock on the front door, but no one    🎃       ")
@@ -151,19 +175,28 @@ def secondScenario():
 
     while True:
         if response.lower() == 'a':
+            logging.info(f"Wrong choice made to get to a nearby phone.")
+            time.sleep(1)
+            player.turns -= 1
+            player.noOfTurns(player.turns)
             secondScenarioWrong()
             print("Let's try again!")
             secondScenario() 
         elif response.lower() == 'b':
+            logging.info(f"Right choice made to run across the street.")
+            time.sleep(1)
             print("\n\nGreat Choice! Let's keep surviving the night!") 
             thirdScenario() 
-        else: 
+        else:
+            logging.info(f"Invalid answer provided.")
+            time.sleep(1) 
             print(f"\nYou must answer A or B, {player.playerName}.")
             response = input(f"\nWhich do you choose? ")
             Return
 print("")
 
 def secondScenarioWrong():
+    logging.info(f"Provided response for wrong choice.")
     print("\n🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃                 ")
     print("🎃                                                                                                          🎃       ")
     print("🎃                               This was not the best choice to make.                                      🎃       ")
@@ -179,6 +212,7 @@ def secondScenarioWrong():
     print("")
 
 def thirdScenario():
+    logging.info(f"Provided response for right choice.")
     print("\n🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃                 ")
     print("🎃                                                                                                          🎃       ")
     print("🎃        As you return to the Doyle residence, you get into th house and lock the door behind you          🎃       ")
@@ -200,19 +234,28 @@ def thirdScenario():
 
     while True:
         if response.lower() == 'a':
+            logging.info(f"Right choice made to run upstairs with the children.")
+            time.sleep(1)
             print("\n\nGreat Choice! Let's keep surviving the night!") 
             fourthScenario()   
         elif response.lower() == 'b':
+            logging.info(f"Wrong choice made to fight Michael.")
+            time.sleep(1)
+            player.turns -= 1
+            player.noOfTurns(player.turns)
             thirdScenarioWrong()
             print("Let's try again!")
             thirdScenario()
-        else: 
+        else:
+            logging.info(f"Invalid answer provided.")
+            time.sleep(1) 
             print(f"\nYou must answer A or B, {player.playerName}.")
             response = input(f"\nWhich do you choose? ")
             Return
 print("")
 
 def thirdScenarioWrong():
+    logging.info(f"Provided response for wrong choice.")
     print("\n🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃                 ")
     print("🎃                                                                                                          🎃       ")
     print("🎃                               This was not the best choice to make.                                      🎃       ")
@@ -227,6 +270,7 @@ def thirdScenarioWrong():
     print("")
 
 def fourthScenario():
+    logging.info(f"Provided response for right choice.")
     print("\n🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃                 ")
     print("🎃                                                                                                          🎃       ")
     print("🎃     You effectively hide the children, but your own hiding spot in the closet is not the most ideal      🎃       ")
@@ -252,19 +296,28 @@ def fourthScenario():
 
     while True:
         if response.lower() == 'a':
+            logging.info(f"Wrong choice made to run to the police station.")
+            time.sleep(1)
+            player.turns -= 1
+            player.noOfTurns(player.turns)
             fourthScenarioWrong()
             print("Let's try again!")
             fourthScenario() 
         elif response.lower() == 'b':
+            logging.info(f"Right choice made to send the kids for help.")
+            time.sleep(1)
             print("\n\nGreat final choice! Now you can rest. . . but wait. . . ")
             conclusion() 
-        else: 
+        else:
+            logging.info(f"Invalid answer provided.")
+            time.sleep(1) 
             print(f"\nYou must answer A or B, {player.playerName}.")
             response = input(f"\nWhich do you choose? ")
             Return
 print("")
 
 def fourthScenarioWrong():
+    logging.info(f"Provided response for wrong choice.")
     print("\n🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃                 ")
     print("🎃                                                                                                          🎃       ")
     print("🎃                               This was not the best choice to make.                                      🎃       ")
@@ -280,6 +333,13 @@ def fourthScenarioWrong():
     print("")
 
 def conclusion():
+    logging.info(f"Provided concluding paragraph for the game.")
+    game_ends = datetime.datetime.now()
+    logging.info(f"You survived with {player.turns} turns left.")
+    logging.info(f"Game started at {game_begins}")
+    logging.info(f"Game ended at {game_ends}")
+    logging.info(f"Total game time: {game_ends - game_begins}.")
+    csv_file()
     print("\n🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃                 ")
     print("🎃                                                                                                          🎃       ")
     print("🎃                                  Ahh!! Michael is still alive!                                           🎃       ")
@@ -297,7 +357,6 @@ def conclusion():
     print("🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 🎃 \n \n  ")   
     print("")
     exit()
-
 intro()
 
 
