@@ -323,7 +323,7 @@ def fourthScenarioWrong():
     print("🎃                               This was not the best choice to make.                                      🎃       ")
     print("🎃                                                                                                          🎃       ")
     print("🎃      The police station is all the way across town, and you don't get too far before the kids            🎃       ")
-    print("🎃          get tired and become overly emotional to continue on the journey. Michael somehow               🎃       ")
+    print("🎃          get tired and become overly emotional to continue the journey. Michael somehow                  🎃       ")
     print("🎃              survives his injury and takes advantage of your slow pace, catching up to you.              🎃       ")
     print("🎃                                  Now three lives are indeed at stake.                                    🎃       ")
     print("🎃                                                                                                          🎃       ")
